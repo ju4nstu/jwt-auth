@@ -25,13 +25,13 @@ export default async function checkout(server, opts) {
         return rep.code(409).send({ message: `the price inside of ${req.body[i].name} does not match his price in the database` })
       }
       
-      let sum = req.body[i].price * req.body[i].quantity
-      finalPrice += sum
-
       if (stockDB.rows[0].stock < req.body[i].quantity) {
         return rep.code(409).send({ message: `the quantity of the product ${stockDB.rows[0].name} is bigger than its available stock` })
       }
-
+      
+      let sum = req.body[i].price * req.body[i].quantity
+      finalPrice += sum
+      
     }
 
     const paymentIntent = await stripe.paymentIntents.create({
